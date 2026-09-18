@@ -1,7 +1,7 @@
 {
 	"$schema": "https://json.schemastore.org/package",
 	"name": "@avanio/ip-block",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "Util to block IP",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
