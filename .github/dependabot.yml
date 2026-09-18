@@ -8,6 +8,7 @@ updates:
       weekly-batch:
         patterns:
           - "*"
+
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
