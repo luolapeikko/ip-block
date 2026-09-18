@@ -1,12 +1,11 @@
 import {ExpireTimeoutCache} from '@avanio/expire-cache';
 import {Address6} from 'ip-address';
-import * as sinon from 'sinon';
-import {afterEach, beforeEach, describe, expect, it} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {type BlockRule, type IpAddress, IpBlockCacheDriver, IpBlocker} from '../src';
 
 const ipv6LinkLocal = new Address6('fe80::/64');
 
-const onBlockSpy = sinon.spy();
+const onBlockSpy = vi.fn();
 
 const rule: BlockRule = {
 	count: 5,
@@ -24,7 +23,7 @@ let blocker: IpBlocker;
 
 describe('IpBlocker', () => {
 	beforeEach(() => {
-		onBlockSpy.resetHistory();
+		onBlockSpy.mockReset();
 	});
 	describe('IpBlocker manual clean', () => {
 		beforeEach(async () => {
@@ -33,7 +32,7 @@ describe('IpBlocker', () => {
 				() => new IpBlockCacheDriver(new ExpireTimeoutCache<number, IpAddress>()),
 			);
 			blocker.on('blocked', onBlockSpy);
-			onBlockSpy.resetHistory();
+			onBlockSpy.mockReset();
 			await blocker.init();
 		});
 		it('should be valid whitelist values', async () => {
@@ -43,28 +42,28 @@ describe('IpBlocker', () => {
 		it('should be valid isBlocked values', async () => {
 			expect((await blocker.checkIp('::1')).unwrap()).to.be.eql({delay: 0, blocked: false, count: 1});
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 0, blocked: false, count: 1});
-			expect(onBlockSpy.callCount).to.be.eq(0);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(0);
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 0, blocked: false, count: 2});
-			expect(onBlockSpy.callCount).to.be.eq(0);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(0);
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 100, blocked: false, count: 3});
-			expect(onBlockSpy.callCount).to.be.eq(0);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(0);
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 200, blocked: false, count: 4});
-			expect(onBlockSpy.callCount).to.be.eq(0);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(0);
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 300, blocked: true, count: 5});
-			expect(onBlockSpy.callCount).to.be.eq(1);
-			expect(onBlockSpy.args[0]).to.be.eql(['127.0.0.1', true]);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(1);
+			expect(onBlockSpy.mock.calls[0]).to.be.eql(['127.0.0.1', true]);
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 400, blocked: true, count: 6});
-			expect(onBlockSpy.callCount).to.be.eq(1);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(1);
 			expect((await blocker.status()).unwrap()).to.be.eql({count: 2, blocked: 1});
 		});
 		it('should be valid isBlocked values after clear', async () => {
 			await blocker.blockIp('127.0.0.1');
-			onBlockSpy.resetHistory();
+			onBlockSpy.mockReset();
 			// clear the ip
 			await blocker.clearIp('127.0.0.1');
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 0, blocked: false, count: 1});
-			expect(onBlockSpy.callCount).to.be.eq(1);
-			expect(onBlockSpy.args[0]).to.be.eql(['127.0.0.1', false]);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(1);
+			expect(onBlockSpy.mock.calls[0]).to.be.eql(['127.0.0.1', false]);
 			expect((await blocker.status()).unwrap()).to.be.eql({count: 1, blocked: 0});
 		});
 		it('should get error if not valid IP', async () => {
@@ -96,32 +95,32 @@ describe('IpBlocker', () => {
 				new IpBlockCacheDriver(new ExpireTimeoutCache<number, IpAddress>()),
 			);
 			blocker.on('blocked', onBlockSpy);
-			onBlockSpy.resetHistory();
+			onBlockSpy.mockReset();
 		});
 		it('should be valid isBlocked values', async () => {
 			expect((await blocker.checkIp('::1')).unwrap()).to.be.eql({delay: 0, blocked: false, count: 1});
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 0, blocked: false, count: 1});
-			expect(onBlockSpy.callCount).to.be.eq(0);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(0);
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 0, blocked: false, count: 2});
-			expect(onBlockSpy.callCount).to.be.eq(0);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(0);
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 100, blocked: false, count: 3});
-			expect(onBlockSpy.callCount).to.be.eq(0);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(0);
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 200, blocked: false, count: 4});
-			expect(onBlockSpy.callCount).to.be.eq(0);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(0);
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 300, blocked: true, count: 5});
-			expect(onBlockSpy.callCount).to.be.eq(1);
-			expect(onBlockSpy.args[0]).to.be.eql(['127.0.0.1', true]);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(1);
+			expect(onBlockSpy.mock.calls[0]).to.be.eql(['127.0.0.1', true]);
 			expect((await blocker.checkIp('127.0.0.1')).unwrap()).to.be.eql({delay: 400, blocked: true, count: 6});
-			expect(onBlockSpy.callCount).to.be.eq(1);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(1);
 			expect((await blocker.status()).unwrap()).to.be.eql({count: 2, blocked: 1});
 		});
 		it('should be valid isBlocked values after timeout', async function () {
 			await blocker.blockIp('127.0.0.1');
-			onBlockSpy.resetHistory();
+			onBlockSpy.mockReset();
 			// wait for the timeout to kick in
 			await sleep(150);
-			expect(onBlockSpy.callCount).to.be.eq(1);
-			expect(onBlockSpy.args[0]).to.be.eql(['127.0.0.1', false]);
+			expect(onBlockSpy.mock.calls.length).to.be.eq(1);
+			expect(onBlockSpy.mock.calls[0]).to.be.eql(['127.0.0.1', false]);
 			expect((await blocker.status()).unwrap()).to.be.eql({count: 0, blocked: 0});
 		});
 		afterEach(() => {

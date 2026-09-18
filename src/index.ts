@@ -1,14 +1,15 @@
-import {EventEmitter} from 'events';
 import {type ILoggerLike, LogLevel, type LogMapInfer, MapLogger} from '@avanio/logger-like';
 import {Err, type IResult, Ok} from '@luolapeikko/result-option';
 import {type Loadable, resolveLoadable, toError} from '@luolapeikko/ts-common';
-import {type Address4, type Address6} from 'ip-address';
-import {type IBlockIpDriver} from './interfaces/IBlockIpDriver';
-import {type BlockResponse} from './types/BlockResponse';
+import {EventEmitter} from 'events';
+import type {Address4, Address6} from 'ip-address';
+import type {IBlockIpDriver} from './interfaces/IBlockIpDriver';
+import type {BlockResponse} from './types/BlockResponse';
 import {type BlockRule, haveRuleDelay} from './types/BlockRule';
 import {assertIpAddress, getIpAddress, type IpAddress} from './types/IpAddress';
-export * from './types';
+
 export * from './drivers';
+export * from './types';
 
 /**
  * Build the delay based on the count and rule.
@@ -58,7 +59,7 @@ export class IpBlocker extends EventEmitter<IpBlockerEventMap> {
 	private blockRule: Loadable<BlockRule>;
 	private whiteList: (Address4 | Address6)[] | undefined | null = null;
 
-	constructor(blockRule: Loadable<BlockRule>, driver: Loadable<IBlockIpDriver>, logger?: ILoggerLike, logMapping?: Partial<IpBlockerLogMapType>) {
+	public constructor(blockRule: Loadable<BlockRule>, driver: Loadable<IBlockIpDriver>, logger?: ILoggerLike, logMapping?: Partial<IpBlockerLogMapType>) {
 		super();
 		this.blockRule = blockRule;
 		this.driver = driver;

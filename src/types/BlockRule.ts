@@ -1,4 +1,4 @@
-import {type Address4, type Address6} from 'ip-address';
+import type {Address4, Address6} from 'ip-address';
 
 export type BlockRule = {
 	/**

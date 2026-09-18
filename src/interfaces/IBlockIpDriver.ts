@@ -1,5 +1,5 @@
-import {type EventEmitter} from 'events';
-import {type IpAddress} from '../types/IpAddress';
+import type {EventEmitter} from 'events';
+import type {IpAddress} from '../types/IpAddress';
 
 export type IpBlockCacheDriverEventMap = {
 	expires: [address: IpAddress];

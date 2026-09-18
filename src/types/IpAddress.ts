@@ -1,5 +1,5 @@
-import {isIP as nodeIsIp} from 'net';
 import {Address4, Address6} from 'ip-address';
+import {isIP as nodeIsIp} from 'net';
 
 /**
  * Type of IP address

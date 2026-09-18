@@ -1,8 +1,8 @@
-import {EventEmitter} from 'events';
 import {type ILoggerLike, LogLevel, type LogMapInfer, MapLogger} from '@avanio/logger-like';
-import {type IAsyncCacheWithEvents} from '@luolapeikko/cache-types';
-import {type IBlockIpDriver} from '../interfaces/IBlockIpDriver';
-import {type IpAddress} from '../types/IpAddress';
+import type {IAsyncCacheWithEvents} from '@luolapeikko/cache-types';
+import {EventEmitter} from 'events';
+import type {IBlockIpDriver} from '../interfaces/IBlockIpDriver';
+import type {IpAddress} from '../types/IpAddress';
 
 export type IpBlockCacheDriverEventMap = {
 	expires: [address: IpAddress];
@@ -32,7 +32,7 @@ export class IpBlockCacheDriver extends EventEmitter<IpBlockCacheDriverEventMap>
 	private cache: IAsyncCacheWithEvents<number, IpAddress>;
 	public readonly logger: MapLogger<IpBlockCacheDriverLogMapType>;
 
-	constructor(cache: IAsyncCacheWithEvents<number, IpAddress>, logger?: ILoggerLike, logMapping?: Partial<IpBlockCacheDriverLogMapType>) {
+	public constructor(cache: IAsyncCacheWithEvents<number, IpAddress>, logger?: ILoggerLike, logMapping?: Partial<IpBlockCacheDriverLogMapType>) {
 		super();
 		this.logger = new MapLogger(logger, {...defaultLogMap, ...logMapping});
 		this.logger.logKey('constructor', 'IpBlockCacheDriver constructor');
@@ -57,10 +57,11 @@ export class IpBlockCacheDriver extends EventEmitter<IpBlockCacheDriverEventMap>
 		return (await this.cache.get(ip)) ?? 0;
 	}
 
-	public async setIpCount(ip: IpAddress, count: number, clearTimeout: number): Promise<void> {
+	public setIpCount(ip: IpAddress, count: number, clearTimeout: number): Promise<void> {
 		this.logger.logKey('set_count', `IpBlockCacheDriver setIpCount: ${ip}, ${count.toString()}, ${clearTimeout.toString()}`);
 		this.handleInit();
-		return this.cache.set(ip, count, new Date(Date.now() + clearTimeout));
+		this.cache.set(ip, count, new Date(Date.now() + clearTimeout));
+		return Promise.resolve();
 	}
 
 	public removeIp(ip: IpAddress): boolean | Promise<boolean> {

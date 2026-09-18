@@ -1,32 +1,12 @@
 {
-	"$schema": "https://json.schemastore.org/tsconfig",
-	"compilerOptions": {
-		"module": "preserve",
-		"target": "es2020",
-		"lib": ["es2020"],
-		"rootDir": "./src",
-		"outDir": "./dist",
-		"moduleResolution": "bundler",
-		"sourceRoot": "./src",
-		"types": ["node"],
-		"sourceMap": true,
-		"strict": true,
-		"declaration": true,
-		"removeComments": false,
-		"inlineSources": true,
-		"inlineSourceMap": false,
-		"forceConsistentCasingInFileNames": true,
-		"noImplicitReturns": true,
-		"noImplicitThis": true,
-		"noImplicitAny": true,
-		"importHelpers": true,
-		"strictNullChecks": true,
-		"noUnusedLocals": true
-	},
-	"typedocOptions": {
-		"entryPoints": ["src/index.ts"],
-		"out": "docs"
-	},
-	"include": ["src/**/*", "src/**/**/*"],
-	"exclude": ["node_modules", "**/*.spec.ts", "test", "vite.config.mts"]
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "lib": ["es2020", "dom"],
+    "types": ["node"]
+  },
+  "include": ["src", "test"],
+  "exclude": ["dist", "node_modules"],
+  "importHelpers": false
 }
