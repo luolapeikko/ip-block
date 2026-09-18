@@ -41,7 +41,7 @@
 	"devDependencies": {
 		"@avanio/expire-cache": "^0.7.0",
 		"@avanio/logger-like": "^0.2.13",
-		"@biomejs/biome": "^2.5.14",
+		"@biomejs/biome": "^2.5.13",
 		"@luolapeikko/cache-types": "^0.0.10",
 		"@luolapeikko/result-option": "^2.4.0",
 		"@luolapeikko/ts-common": "^1.1.6",
