@@ -35,9 +35,9 @@
 	"author": "mharj",
 	"license": "LGPL-3.0-or-later",
 	"bugs": {
-		"url": "https://github.com/AvanioOy/ip-block/issues"
+		"url": "https://github.com/luolapeikko/ip-block/issues"
 	},
-	"homepage": "https://github.com/AvanioOy/ip-block#readme",
+	"homepage": "https://github.com/luolapeikko/ip-block#readme",
 	"devDependencies": {
 		"@avanio/expire-cache": "^0.7.0",
 		"@avanio/logger-like": "^0.2.13",
